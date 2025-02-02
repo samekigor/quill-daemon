@@ -14,7 +14,7 @@ message LoginRequest {
 }
 
 message LoginStatus {
-    string status = 1;
+    bool isSuccess = 1;
     string message = 2;
 }
 
@@ -24,7 +24,7 @@ message LogoutRequest {
 }
 
 message LogoutStatus{
-    string status = 1;
+    bool isSuccess = 1;
     string message = 2;
 
 }
