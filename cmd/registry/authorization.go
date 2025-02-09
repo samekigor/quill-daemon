@@ -7,9 +7,6 @@ import (
 	"github.com/samekigor/quill-daemon/cmd/utils"
 	"oras.land/oras-go/v2/registry/remote"
 
-	// "github.com/oras-project/oras-go/v2"
-	// "github.com/oras-project/oras-go/v2/content/file"
-	// "github.com/oras-project/oras-go/v2/registry/remote"
 	orasAuth "oras.land/oras-go/v2/registry/remote/auth"
 )
 
@@ -40,12 +37,11 @@ func NewRegistryDetails(registry, repository, tag, username, password string) *R
 }
 
 // IsPingRegistry checks whether the registry is reachable and returns the status.
-func (rd *RegistryDetails) IsPingRegistry(ctx context.Context) (pinged bool, err error) {
+func (rd *RegistryDetails) PingRegistry(ctx context.Context) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			utils.ErrorLogger.Printf("Panic detected in IsPingRegistry: %v", r)
 			err = fmt.Errorf("unexpected error: %v", r)
-			pinged = false
 		}
 	}()
 
@@ -55,7 +51,7 @@ func (rd *RegistryDetails) IsPingRegistry(ctx context.Context) (pinged bool, err
 	remoteRegistry, err := remote.NewRegistry(rd.Registry)
 	if err != nil {
 		utils.ErrorLogger.Printf("Failed to create remote registry: %v", err)
-		return false, err
+		return err
 	}
 
 	// Configure authentication for the registry client
@@ -73,9 +69,9 @@ func (rd *RegistryDetails) IsPingRegistry(ctx context.Context) (pinged bool, err
 	err = remoteRegistry.Ping(ctx)
 	if err != nil {
 		utils.WarnLogger.Printf("Failed to ping registry %s: %v", rd.Registry, err)
-		return false, fmt.Errorf("registry ping failed: %v", err) // Return an error but don't panic
+		return fmt.Errorf("registry ping failed: %v", err) // Return an error but don't panic
 	}
 
 	utils.InfoLogger.Printf("Successfully pinged registry: %s", rd.Registry)
-	return true, nil
+	return nil
 }

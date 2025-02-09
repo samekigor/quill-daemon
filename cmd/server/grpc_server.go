@@ -16,7 +16,6 @@ import (
 	"github.com/samekigor/quill-daemon/proto/auth"
 )
 
-// StartGRPCServer uruchamia serwer gRPC nasłuchujący na Unix Socket.
 func StartGRPCServer(socketPath string) error {
 	if _, err := os.Stat(socketPath); err == nil {
 		os.Remove(socketPath)

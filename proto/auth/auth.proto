@@ -20,7 +20,6 @@ message LoginStatus {
 
 message LogoutRequest {
     string registry = 1;
-    string username = 2;
 }
 
 message LogoutStatus{

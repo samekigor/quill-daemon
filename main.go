@@ -21,4 +21,5 @@ func main() {
 	if err := server.StartGRPCServer(SocketPath); err != nil {
 		utils.ErrorLogger.Fatalf("Failed to start gRPC server: %v", err)
 	}
+
 }
