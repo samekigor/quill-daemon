@@ -1,4 +1,4 @@
-package utils
+package registry
 
 import (
 	"encoding/base64"
@@ -92,7 +92,7 @@ func GetRegistryEntryByName(registryName string) (*RegistryEntry, error) {
 	entries, err := loadFromYAML()
 	if err != nil {
 		if os.IsNotExist(err) {
-			return nil, fmt.Errorf("registry entry not found: %s", registryName)
+			return nil, fmt.Errorf("credits file not found")
 		}
 		return nil, err
 	}

@@ -23,6 +23,10 @@ type RegistryDetails struct {
 	KeyInStore string
 }
 
+func (rd *RegistryDetails) GetImgRef() (imgRef string) {
+	return fmt.Sprintf("%s/%s:%s", rd.Registry, rd.Repository, rd.Tag)
+}
+
 func NewRegistryDetails(registry, repository, tag, username, password string) *RegistryDetails {
 	return &RegistryDetails{
 		Registry:   registry,
@@ -36,7 +40,6 @@ func NewRegistryDetails(registry, repository, tag, username, password string) *R
 	}
 }
 
-// IsPingRegistry checks whether the registry is reachable and returns the status.
 func (rd *RegistryDetails) PingRegistry(ctx context.Context) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -47,14 +50,12 @@ func (rd *RegistryDetails) PingRegistry(ctx context.Context) (err error) {
 
 	utils.InfoLogger.Printf("Attempting to ping registry: %s", rd.Registry)
 
-	// Create remote registry instance
 	remoteRegistry, err := remote.NewRegistry(rd.Registry)
 	if err != nil {
 		utils.ErrorLogger.Printf("Failed to create remote registry: %v", err)
 		return err
 	}
 
-	// Configure authentication for the registry client
 	remoteRegistry.Client = &orasAuth.Client{
 		Credential: func(ctx context.Context, registry string) (orasAuth.Credential, error) {
 			return orasAuth.Credential{
@@ -65,7 +66,6 @@ func (rd *RegistryDetails) PingRegistry(ctx context.Context) (err error) {
 		Cache: orasAuth.NewCache(),
 	}
 
-	// Perform registry ping check
 	err = remoteRegistry.Ping(ctx)
 	if err != nil {
 		utils.WarnLogger.Printf("Failed to ping registry %s: %v", rd.Registry, err)

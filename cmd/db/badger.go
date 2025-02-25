@@ -41,14 +41,3 @@ func InitDb() (err error) {
 	utils.InfoLogger.Printf("Database works in: %s", dbPath)
 	return nil
 }
-
-func SaveToDb(key string, val string) (err error) {
-	err = db.Update(func(txn *badger.Txn) error {
-		err = txn.Set([]byte(key), []byte(val))
-		return err
-	})
-	if err != nil {
-		utils.InfoLogger.Printf("Failed to save key %s: %v", key, err)
-	}
-	return nil
-}

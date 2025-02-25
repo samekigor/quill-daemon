@@ -6,7 +6,6 @@ import (
 	"log"
 
 	"github.com/samekigor/quill-daemon/cmd/registry"
-	"github.com/samekigor/quill-daemon/cmd/utils"
 	auth "github.com/samekigor/quill-daemon/proto/auth"
 )
 
@@ -17,7 +16,7 @@ type AuthServer struct {
 func (s *AuthServer) LoginToRegistry(ctx context.Context, req *auth.LoginRequest) (*auth.LoginStatus, error) {
 
 	log.Printf("Received Login request for registry: %s, username: %s", req.Registry, req.Username)
-	re, err := utils.GetRegistryEntryByName(req.Registry)
+	re, err := registry.GetRegistryEntryByName(req.Registry)
 	defer func() { re.Password = "" }()
 
 	if err != nil {
@@ -54,7 +53,7 @@ func (s *AuthServer) LoginToRegistry(ctx context.Context, req *auth.LoginRequest
 func (s *AuthServer) LogoutFromRegistry(ctx context.Context, req *auth.LogoutRequest) (*auth.LogoutStatus, error) {
 	log.Printf("Received Logout request for registry: %s", req.Registry)
 
-	re, err := utils.GetRegistryEntryByName(req.Registry)
+	re, err := registry.GetRegistryEntryByName(req.Registry)
 
 	if err != nil {
 		return &auth.LogoutStatus{

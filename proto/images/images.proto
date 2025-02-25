@@ -1,0 +1,31 @@
+syntax = "proto3";
+package images;
+
+option go_package = "github.com/samekigor/quill-daemon/proto/images";
+
+service Images {
+    rpc PullImage(PullRequest) returns (PullStatus) {}
+    rpc PushImage(PushRequest) returns (PushStatus) {}
+}
+
+message PullRequest {
+    string registry = 1;
+    string repository = 2;
+    string tag = 3;
+}
+
+message PullStatus{
+    bool isSuccess = 1;
+    string message = 2;
+
+}
+
+message PushRequest {
+
+}
+
+message PushStatus{
+    bool isSuccess = 1;
+    string message = 2;
+
+}
